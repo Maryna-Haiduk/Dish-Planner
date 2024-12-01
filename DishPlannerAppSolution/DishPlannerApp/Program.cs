@@ -1,3 +1,8 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using DishPlannerApp.Data;
+using DishPlannerApp.Models;
+
 namespace DishPlannerApp
 {
     public class Program
@@ -7,6 +12,14 @@ namespace DishPlannerApp
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
@@ -24,7 +37,8 @@ namespace DishPlannerApp
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication(); // Authentication middleware
+            app.UseAuthorization();  // Authorization middleware
 
             app.MapControllerRoute(
                 name: "default",
