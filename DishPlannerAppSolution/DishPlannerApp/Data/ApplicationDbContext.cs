@@ -13,6 +13,8 @@ namespace DishPlannerApp.Data
         }
 
         // Add DbSets for your models here
+        public DbSet<User> Users { get; set; }
+
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Menu> Menus { get; set; }
     }
