@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using DishPlannerApp.Data;
 using DishPlannerApp.Models;
 using Microsoft.Extensions.Configuration;
+using DishPlannerApp.Data.UserRepository;
 
 namespace DishPlannerApp
 {
@@ -12,9 +13,13 @@ namespace DishPlannerApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Access the configuration object directly from the builder
+            IConfiguration configuration = builder.Configuration;
+
             // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
      options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<IUserRepository, UserRepository>(); // Register the repository
 
             builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -35,7 +40,18 @@ namespace DishPlannerApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            // Configure the HTTP request pipeline
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             app.UseAuthentication(); // Authentication middleware
             app.UseAuthorization();  // Authorization middleware
@@ -46,5 +62,13 @@ namespace DishPlannerApp
 
             app.Run();
         }
+
+        //public void ConfigureServices(IServiceCollection services)
+        //{
+        //    services.AddDbContext<ApplicationDbContext>(options => 
+        //        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+        //    services.AddScoped<IUserRepository, UserRepository>(); // Register the repository
+
+        //}
     }
 }
