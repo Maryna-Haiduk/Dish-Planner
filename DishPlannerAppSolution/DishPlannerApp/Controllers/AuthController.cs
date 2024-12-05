@@ -1,6 +1,7 @@
 ﻿using DishPlannerApp.Data.UserRepository;
 using DishPlannerApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using DishPlannerApp.DTOs;
 
 namespace DishPlannerApp.Controllers
 {
@@ -18,12 +19,12 @@ namespace DishPlannerApp.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register (UserDto userDto)
         {
-            if (await _userRepository.UserExistsAsync(userDto.Username))
+            if (await _userRepository.UserExistsAsync(userDto.Name))
                 return BadRequest("Username already exists.");
 
             var user = new User
             {
-                UserName = userDto.Username,
+                UserName = userDto.Name,
                 Email = userDto.Email
             };
 
@@ -34,7 +35,7 @@ namespace DishPlannerApp.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginDto loginDto)
         {
-            var user = await _userRepository.LoginAsync(loginDto.Username, loginDto.Password);
+            var user = await _userRepository.LoginAsync(loginDto.Name, loginDto.Password);
             if (user == null)
                 return Unauthorized("Invalid username or password");
 
