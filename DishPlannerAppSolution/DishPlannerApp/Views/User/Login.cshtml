@@ -5,7 +5,7 @@
 }
 
 <h2>Login</h2>
-
+<br />
 <form asp-action="Login" method="post">
     <div class="form-group">
         <label asp-for="Name"></label>
@@ -18,7 +18,7 @@
         <input asp-for="Password" type="password" class="form-control" />
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
-
+    <br />
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
 
