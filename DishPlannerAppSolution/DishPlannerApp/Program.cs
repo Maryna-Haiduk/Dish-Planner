@@ -38,6 +38,7 @@ namespace DishPlannerApp
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             // Configure the HTTP request pipeline
