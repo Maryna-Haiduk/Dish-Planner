@@ -19,16 +19,27 @@ namespace DishPlannerApp.Controllers
         // List all recipes
         public async Task<IActionResult> Index()
         {
-            var recipes = await _recipeRepository.GetAllRecipesAsync();
-            var recipeDtos = recipes.Select(r => new RecipeDto
-            {
-                RecipeId = r.RecipeId,
-                RecipeTitle = r.RecipeTitle,
-                Description = r.Description,
-                Ingredients = r.Ingredients,
-                Instructions = r.Instructions
-            });
-            return View(recipeDtos);
+            var recipes = (await _recipeRepository.GetAllRecipesAsync() ?? Enumerable.Empty<Recipe>())
+                  .Select(r => new RecipeDto
+                  {
+                      RecipeId = r.RecipeId,
+                      RecipeTitle = r.RecipeTitle,
+                      Description = r.Description
+                  })
+                  .ToList();
+            return View(recipes);
+
+
+            //var recipes = await _recipeRepository.GetAllRecipesAsync();
+            //var recipeDtos = recipes.Select(r => new RecipeDto
+            //{
+            //    RecipeId = r.RecipeId,
+            //    RecipeTitle = r.RecipeTitle,
+            //    Description = r.Description,
+            //    Ingredients = r.Ingredients,
+            //    Instructions = r.Instructions
+            //});
+            //return View(recipeDtos);
         }
 
         // View details of a recipe

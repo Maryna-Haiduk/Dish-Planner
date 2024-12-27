@@ -4,6 +4,7 @@ using DishPlannerApp.Data;
 using DishPlannerApp.Models;
 using Microsoft.Extensions.Configuration;
 using DishPlannerApp.Data.UserRepository;
+using DishPlannerApp.Data.RecipeRepository;
 
 namespace DishPlannerApp
 {
@@ -19,8 +20,8 @@ namespace DishPlannerApp
             // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
      options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddScoped<IUserRepository, UserRepository>(); // Register the repository
-
+            builder.Services.AddScoped<IUserRepository, UserRepository>(); 
+            builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
             builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();

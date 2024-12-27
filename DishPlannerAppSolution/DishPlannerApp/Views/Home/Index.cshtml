@@ -1,8 +1,57 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model IEnumerable<DishPlannerApp.DTOs.RecipeDto>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Recipes</h1>
+<a asp-action="Create">Create New Recipe</a>
+
+
+@* <h1>Create New Recipe</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+ *@
+
+
+@if(Model != null )
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+                <tbody>
+                    @foreach (var recipe in Model)
+                    {
+                        <tr>
+                            <td>@recipe.RecipeTitle</td>
+                            <td>@recipe.Description</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@recipe.RecipeId">View</a> |
+                                <a asp-action="Edit" asp-route-id="@recipe.RecipeId">Edit</a> |
+                                <a asp-action="Delete" asp-route-id="@recipe.RecipeId">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+        </table>
+    }
