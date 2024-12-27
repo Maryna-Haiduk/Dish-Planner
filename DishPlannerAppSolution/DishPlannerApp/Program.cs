@@ -5,6 +5,7 @@ using DishPlannerApp.Models;
 using Microsoft.Extensions.Configuration;
 using DishPlannerApp.Data.UserRepository;
 using DishPlannerApp.Data.RecipeRepository;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace DishPlannerApp
 {
@@ -28,6 +29,56 @@ namespace DishPlannerApp
 
             builder.Services.AddControllersWithViews();
 
+            void ConfigureServices(IServiceCollection services)
+            {
+                services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                        .AddCookie(options =>
+                        {
+                            options.LoginPath = "/User/Login"; // Path to the login page
+                            options.AccessDeniedPath = "/User/AccessDenied"; // Optional
+                        });
+
+                services.AddAuthorization();
+                services.AddControllersWithViews();
+            }
+
+            void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+            {
+                if (env.IsDevelopment())
+                {
+                    app.UseDeveloperExceptionPage();
+                }
+                else
+                {
+                    app.UseExceptionHandler("/Home/Error");
+                    app.UseHsts();
+                }
+
+                app.UseHttpsRedirection();
+                app.UseStaticFiles();
+
+                app.UseRouting();
+
+                app.UseAuthentication(); // Make sure this is added
+                app.UseAuthorization();
+
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                });
+            }
+
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/User/Login"; // Correct path to your login action
+                options.LogoutPath = "/User/Logout"; // If you add logout functionality later
+                options.AccessDeniedPath = "/User/AccessDenied"; // Optional, for authorization failures
+            });
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -49,14 +100,12 @@ namespace DishPlannerApp
             }
 
             app.UseRouting();
-
+            app.UseAuthentication(); // Authentication middleware
+            app.UseAuthorization();  // Authorization middleware
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
-            app.UseAuthentication(); // Authentication middleware
-            app.UseAuthorization();  // Authorization middleware
 
             app.MapControllerRoute(
                 name: "default",

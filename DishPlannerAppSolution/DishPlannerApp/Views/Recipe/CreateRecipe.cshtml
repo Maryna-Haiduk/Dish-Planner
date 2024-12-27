@@ -1,0 +1,45 @@
+﻿@model DishPlannerApp.DTOs.RecipeDto
+
+@{
+    ViewData["Title"] = "Create Recipe";
+}
+
+<h2>Create a New Recipe</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="RecipeTitle" class="control-label">Title</label>
+        <input asp-for="RecipeTitle" class="form-control" />
+        <span asp-validation-for="RecipeTitle" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" class="control-label">Description</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Ingredients" class="control-label">Ingredients</label>
+        <textarea asp-for="Ingredients" class="form-control"></textarea>
+        <span asp-validation-for="Ingredients" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Instructions" class="control-label">Instructions</label>
+        <textarea asp-for="Instructions" class="form-control"></textarea>
+        <span asp-validation-for="Instructions" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to Recipes</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

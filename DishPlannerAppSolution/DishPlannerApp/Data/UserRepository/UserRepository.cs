@@ -27,9 +27,9 @@ namespace DishPlannerApp.Data.UserRepository
         }
 
         // Login Logic
-        public async Task<User> LoginAsync(string username, string password)
+        public async Task<User> LoginAsync(string userEmail, string password)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
             if (user == null) return null;
 
             // Verify the password
@@ -40,9 +40,9 @@ namespace DishPlannerApp.Data.UserRepository
         }
 
         // Check if the user exists
-        public async Task<bool> UserExistsAsync(string username)
+        public async Task<bool> UserExistsAsync(string email)
         {
-            return await _context.Users.AnyAsync(u => u.UserName == username);
+            return await _context.Users.AnyAsync(u => u.Email == email);
         }
     }
 }

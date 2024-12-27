@@ -28,9 +28,9 @@ namespace DishPlannerApp.Controllers
             if (!ModelState.IsValid)
                 return View(userDto);
 
-            if (await _userRepository.UserExistsAsync(userDto.Name))
+            if (await _userRepository.UserExistsAsync(userDto.Email))
             {
-                ModelState.AddModelError("", "Username already exists.");
+                ModelState.AddModelError("", "Email already exists.");
                 return View(userDto);
             }
 
@@ -55,10 +55,20 @@ namespace DishPlannerApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(UserLoginDto loginDto)
         {
-            if (!ModelState.IsValid)
-                return View(loginDto);
 
-            var user = await _userRepository.LoginAsync(loginDto.Name, loginDto.Password);
+            //if (!ModelState.IsValid)
+            //{
+            //    foreach (var modelState in ModelState.Values)
+            //    {
+            //        foreach (var error in modelState.Errors)
+            //        {
+            //            Console.WriteLine(error.ErrorMessage);
+            //        }
+            //    }
+            //    return View(loginDto);
+            //}
+
+            var user = await _userRepository.LoginAsync(loginDto.Email, loginDto.Password);
             if (user == null)
             {
                 ModelState.AddModelError("", "Invalid username or password.");
